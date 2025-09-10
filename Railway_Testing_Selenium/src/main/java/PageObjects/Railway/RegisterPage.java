@@ -7,10 +7,10 @@ import org.openqa.selenium.WebElement;
 
 public class RegisterPage extends GeneralPage{
     //Locator
-    private final By _txtEmail = By.xpath("//input[@id='email']");
-    private final By _txtPassword = By.xpath("//input[@id='password']");
-    private final By _txtConfirmPassword = By.xpath("//input[@id='confirmPassword']");
-    private final By _txtPid = By.xpath("//input[@id='pid']");
+    private final By _txtEmail = By.id("email");
+    private final By _txtPassword = By.id("password");
+    private final By _txtConfirmPassword = By.id("confirmPassword");
+    private final By _txtPid = By.id("pid");
     private final By _btnRegister = By.xpath("//input[@value='Register']");
 
     // Elements

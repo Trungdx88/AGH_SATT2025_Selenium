@@ -5,24 +5,11 @@ import PageObjects.Railway.BookTicketPage;
 import PageObjects.Railway.ChangePasswordPage;
 import PageObjects.Railway.HomePage;
 import PageObjects.Railway.LoginPage;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-public class LoginTest {
-    @BeforeMethod
-    public void beforeMethod() {
-        System.out.println("Pre-condition");
-        Constant.WEBDRIVER = new ChromeDriver();
-        Constant.WEBDRIVER.manage().window().maximize();
-    }
-    @AfterMethod
-    public void afterMethod() {
-        System.out.println("Post-condition");
-        Constant.WEBDRIVER.quit();
-    }
+public class LoginTest extends BaseTest{
+
     @Test
     public void TC01() {
         System.out.println("TC01 - User can log into Railway with valid username and password");
@@ -31,7 +18,9 @@ public class LoginTest {
 
         LoginPage loginPage = homePage.gotoLoginPage();
 
-        String actualMsg = loginPage.login(Constant.USERNAME, Constant.PASSWORD).getWelcomeMessage();
+        loginPage.login(Constant.USERNAME, Constant.PASSWORD);
+        String actualMsg = homePage.getWelcomeMessage();
+
         String expectedMsg = "Welcome " + Constant.USERNAME;
         Assert.assertEquals(actualMsg, expectedMsg, "Welcome message is not displayed as expected");
     }
@@ -87,11 +76,9 @@ public class LoginTest {
         homePage.open();
 
         LoginPage loginPage = homePage.gotoLoginPage();
-        loginPage.login(Constant.USERNAME,Constant.PASSWORD_INVALID);
-        loginPage.login(Constant.USERNAME,Constant.PASSWORD_INVALID);
-        loginPage.login(Constant.USERNAME,Constant.PASSWORD_INVALID);
-        loginPage.login(Constant.USERNAME,Constant.PASSWORD_INVALID);
-        loginPage.login(Constant.USERNAME,Constant.PASSWORD_INVALID);
+        for (int i = 0; i < 5; i++) {
+            loginPage.login(Constant.USERNAME, Constant.PASSWORD_INVALID);
+        }
 
         String actualMsg = loginPage.getErrorMessage();
         String expectedMsg = "You have used 4 out of 5 login attempts. After all 5 have been used, you will be unable to login for 15 minutes.";

@@ -5,11 +5,9 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 public class GeneralPage {
-    private final By pageTitle = By.tagName("h1");
-    public String getPageTitle() {
-        return Constant.WEBDRIVER.findElement(pageTitle).getText();
-    }
     //Locator
+    private final By lnkBookTicket = By.linkText("Book ticket");
+    private final By pageTitle = By.tagName("h1");
     private final By tabLogin = By.xpath("//div[@id='menu']//a[@href='/Account/Login.cshtml']");
     private final By lblWelcomeMessage = By.xpath("//div[@class='account']/strong");
     private final By lblLoginErrorMsg = By.xpath("//p[@class='message error LoginForm']");
@@ -46,6 +44,9 @@ public class GeneralPage {
     }
 
     // Methods
+    public String getPageTitle() {
+        return Constant.WEBDRIVER.findElement(pageTitle).getText();
+    }
     public String getWelcomeMessage() {
         return this.getLblWelcomeMessage().getText();
     }
@@ -71,5 +72,17 @@ public class GeneralPage {
     public LoginPage gotoLoginPage() {
         this.getTabLogin().click();
         return new LoginPage();
+    }
+    public BookTicketPage gotoBookTicketPage() {
+        Constant.WEBDRIVER.findElement(lnkBookTicket).click();
+        return new BookTicketPage();
+    }
+    public ChangePasswordPage gotoChangePasswordPage() {
+        Constant.WEBDRIVER.findElement(By.linkText("Change password")).click();
+        return new ChangePasswordPage();
+    }
+    public RegisterPage gotoRegisterPage() {
+        Constant.WEBDRIVER.findElement(By.linkText("Register")).click();
+        return new RegisterPage();
     }
 }

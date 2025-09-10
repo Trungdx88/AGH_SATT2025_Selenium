@@ -6,12 +6,13 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 
 public class ChangePasswordPage extends GeneralPage{
-    private final By _txtCurrentPassword = By.xpath("//input[@id='currentPassword']");
-    private final By _txtNewPassword = By.xpath("//input[@id='newPassword']");
-    private final By _txtConfirmPassword = By.xpath("//input[@id='confirmPassword']");
+    //Locator
+    private final By _txtCurrentPassword = By.id("currentPassword");
+    private final By _txtNewPassword = By.id("newPassword");
+    private final By _txtConfirmPassword = By.id("confirmPassword");
     private final By _btnChangePassword = By.xpath("//input[@value='Change Password']");
 
-
+    // Elements
     public WebElement getTxtCurrentPassword(){
         return Constant.WEBDRIVER.findElement(_txtCurrentPassword);
     }
