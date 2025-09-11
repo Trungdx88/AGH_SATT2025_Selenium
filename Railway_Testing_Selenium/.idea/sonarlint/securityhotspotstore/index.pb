@@ -21,3 +21,5 @@ a
 1src/test/java/Tsetcases/Railway/RegisterTest.java,b\8\b8e3b5d71061f37e9eebe1ca93f2261293309bd9
 g
 7src/test/java/Tsetcases/Railway/ChangePasswordTest.java,2\8\285d71a469d5fb01587c9eafaa25e0d88b926ec1
+]
+-src/test/java/Tsetcases/Railway/BaseTest.java,4\7\479302c8f63321c1f2a719546e09a73ca96b654f
