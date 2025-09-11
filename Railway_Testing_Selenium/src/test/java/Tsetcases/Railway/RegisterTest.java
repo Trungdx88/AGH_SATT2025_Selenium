@@ -35,6 +35,7 @@ public class RegisterTest extends BaseTest{
         Assert.assertEquals(actualMsg, expectedMsg, "Error message is not displayed as expected");
     }
 
+
     @Test
     public void TC11() {
         System.out.println("TC11 - User can't create account while password and PID fields are empty");
