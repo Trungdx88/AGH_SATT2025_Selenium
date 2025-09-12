@@ -11,5 +11,5 @@ Railway_Testing_Selenium/.idea/sonarlint/issuestore/6/3/6327d2c518faca60591017cd
 *.xml
 *.xml
 *.xml
-/Railway_Testing_Selenium
+# /Railway_Testing_Selenium
 *.xml
