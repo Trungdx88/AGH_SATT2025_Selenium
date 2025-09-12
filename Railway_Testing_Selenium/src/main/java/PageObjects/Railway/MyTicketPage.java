@@ -11,7 +11,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 
 public class MyTicketPage extends GeneralPage{
-    private final By btnCancelFirstTicket = By.xpath("(//table[@class='MyTable']//input[@value='Cancel'])[1]");
+   private final By btnCancelFirstTicket = By.xpath("/table[@class='MyTable']//tr[td[input[contains(@onclick,'%s')]]]//input[@type='button' and @value='Cancel']");
+
     public void cancelFirstTicket() {
         WebDriverWait wait = new WebDriverWait(Constant.WEBDRIVER, Duration.ofSeconds(30));
         WebElement cancelBtn = wait.until(ExpectedConditions.elementToBeClickable(btnCancelFirstTicket));
