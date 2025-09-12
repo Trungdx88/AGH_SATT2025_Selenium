@@ -9,7 +9,7 @@ import org.testng.annotations.Test;
 
 public class ChangePasswordTest extends BaseTest {
     @Test
-    public void TC09_UserCanChangePassword() {
+    public void TC09() {
         System.out.println("TC09 - User can change password");
         HomePage homePage = new HomePage();
         homePage.open();

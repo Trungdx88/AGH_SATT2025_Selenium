@@ -16,7 +16,10 @@ public class GeneralPage {
     private final By lblValidPasswordErrorMsg = By.xpath("//label[@for='password' and @class='validation-error']");
     private final By lblPidError = By.xpath("//label[@for='pid' and @class='validation-error']");
     private final By lblChangePasswordSuccessMsg = By.xpath("//p[@class='message success']");
-
+    private final By lblBookTicketSuccessMsg = By.xpath("//h1[@align='center']");
+    private final By lblForgotPasswordErrorMsg = By.xpath("//p[@class='message error']");
+    private final By _lblValidResetTokenError = By.xpath("//label[@for='resetToken' and @class='validation-error']");
+    private final By _lblConfirmError = By.xpath("//label[@for='confirmPassword' and @class='validation-error']");
 
     // Elements
     protected WebElement getTabLogin() {
@@ -42,6 +45,18 @@ public class GeneralPage {
     }
     protected WebElement getLblChangePasswordSuccessMsg() {return Constant.WEBDRIVER.findElement(lblChangePasswordSuccessMsg);
     }
+    protected WebElement getlblBookTicketSuccessMsg() {return Constant.WEBDRIVER.findElement(lblBookTicketSuccessMsg);
+    }
+    protected WebElement getlblForgotPasswordMsg() {
+        return Constant.WEBDRIVER.findElement(lblForgotPasswordErrorMsg);
+    }
+    protected WebElement getlblValidResetTokenMsg() {
+        return Constant.WEBDRIVER.findElement(_lblValidResetTokenError);
+    }
+    protected WebElement getlbConfirmMsg() {
+        return Constant.WEBDRIVER.findElement(_lblConfirmError);
+    }
+
 
     // Methods
     public String getPageTitle() {
@@ -68,6 +83,18 @@ public class GeneralPage {
     public String getChangePasswordSuccessMsg() {
         return this.getLblChangePasswordSuccessMsg().getText();
     }
+    public String getBookTicketSuccessMessage(){return this.getlblBookTicketSuccessMsg().getText();
+    }
+    public String getForgotPasswordErrorMessage() {
+        return this.getlblForgotPasswordMsg().getText();
+    }
+
+    public String getValidResetTokenMessage(){
+        return this.getlblValidResetTokenMsg().getText();
+    }
+    public String getPasswordConfirmMessage(){
+        return this.getlbConfirmMsg().getText();
+    }
 
     public LoginPage gotoLoginPage() {
         this.getTabLogin().click();
@@ -84,5 +111,17 @@ public class GeneralPage {
     public RegisterPage gotoRegisterPage() {
         Constant.WEBDRIVER.findElement(By.linkText("Register")).click();
         return new RegisterPage();
+    }
+    public TimetablePage gotoTimetablePage() {
+        Constant.WEBDRIVER.findElement(By.linkText("Timetable")).click();
+        return new TimetablePage();
+    }
+    public ForgotPasswordPage gotoForgotPasswordPage() {
+        Constant.WEBDRIVER.findElement(By.linkText("Forgot Password page")).click();
+        return new ForgotPasswordPage();
+    }
+    public MyTicketPage gotoMyTicketPage() {
+        Constant.WEBDRIVER.findElement(By.linkText("My ticket")).click();
+        return new MyTicketPage();
     }
 }
