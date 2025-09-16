@@ -73,13 +73,21 @@ public class BookTicketPage extends GeneralPage {
         return Constant.WEBDRIVER.findElement(_lblSuccessMessage).getText().trim();
     }
 
-    public void bookTicket(String departDate, String departStation, String arriveStation, String seatType, String ticketAmount) {
-        this.selectDepartDate(departDate);
-        this.selectDepartStation(departStation);
-        this.selectArriveStation(arriveStation);
-        this.selectSeatType(seatType);
-        this.selectTicketAmount(ticketAmount);
+    public void fillBookTicketInformation(String departDate, String departStation, String arriveStation, String seatType, String ticketAmount) {
+    this.selectDepartDate(departDate);
+    this.selectDepartStation(departStation);
+    this.selectArriveStation(arriveStation);
+    this.selectSeatType(seatType);
+    this.selectTicketAmount(ticketAmount);
+}
+    public void submitBookTicket() {
         ((JavascriptExecutor) Constant.WEBDRIVER).executeScript("window.scrollTo(0, document.body.scrollHeight);");
         this.clickBookTicketButton();
     }
+
+    public void bookTicket(String departDate, String departStation, String arriveStation, String seatType, String ticketAmount) {
+        fillBookTicketInformation(departDate, departStation, arriveStation, seatType, ticketAmount);
+        submitBookTicket();
+    }
+
 }

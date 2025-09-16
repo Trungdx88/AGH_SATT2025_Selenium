@@ -23,10 +23,4 @@ public class BookTicket {
     public String getArriveStation() { return arriveStation; }
     public String getSeatType() { return seatType; }
     public String getTicketAmount() { return ticketAmount; }
-
-    // Factory method ví dụ
-
-    public static BookTicket fromTimetable(String departStation, String arriveStation) {
-        return new BookTicket("", departStation, arriveStation, TestData.SEAT_TYPE.getValue(), TestData.TICKET_AMOUNT.getValue());
-    }
 }

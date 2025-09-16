@@ -30,13 +30,28 @@ public class RegisterPage extends GeneralPage{
         return Constant.WEBDRIVER.findElement(_btnRegister);
     }
 
-    public HomePage register(String email , String password , String confirmPassword , String pid){
-        this.getTxtEmail().sendKeys(email);
-        this.getTxtPassword().sendKeys(password);
-        this.getTxtConfirmPassword().sendKeys(confirmPassword);
-        this.getTxtPid().sendKeys(pid);
+    public void fillRegisterInformation(String email, String password, String confirmPassword, String pid) {
+        getTxtEmail().clear();
+        getTxtEmail().sendKeys(email);
+
+        getTxtPassword().clear();
+        getTxtPassword().sendKeys(password);
+
+        getTxtConfirmPassword().clear();
+        getTxtConfirmPassword().sendKeys(confirmPassword);
+
+        getTxtPid().clear();
+        getTxtPid().sendKeys(pid);
+    }
+
+    public void submitRegisterInformation() {
         ((JavascriptExecutor) Constant.WEBDRIVER).executeScript("window.scrollTo(0, document.body.scrollHeight);");
-        this.getBntRegister().click();
+        getBntRegister().click();
+    }
+
+    public HomePage register(String email, String password, String confirmPassword, String pid) {
+        fillRegisterInformation(email, password, confirmPassword, pid);
+        submitRegisterInformation();
         return new HomePage();
     }
 }

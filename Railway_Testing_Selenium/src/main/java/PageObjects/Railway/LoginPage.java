@@ -19,11 +19,28 @@ public class LoginPage extends GeneralPage{
     }
     public WebElement getBtnLogin() {return Constant.WEBDRIVER.findElement(_btnLogin);}
 
-    public HomePage login(User user){
-        this.getTxtUsername().sendKeys(user.getUsername());
-        this.getTxtPassword().sendKeys(user.getPassword());
-        ((JavascriptExecutor) Constant.WEBDRIVER).executeScript("window.scrollTo(0, document.body.scrollHeight);");
-        this.getBtnLogin().click();
+    public void fillLoginInformation(User user) {
+        getTxtUsername().clear();
+        getTxtUsername().sendKeys(user.getUsername());
+        getTxtPassword().clear();
+        getTxtPassword().sendKeys(user.getPassword());
+    }
+    public void submitLoginInformation(User user) {
+        fillLoginInformation(user);
+        ((JavascriptExecutor) Constant.WEBDRIVER).executeScript("arguments[0].scrollIntoView(true);", getBtnLogin());
+        getBtnLogin().click();
+    }
+
+    public HomePage login(User user) {
+        submitLoginInformation(user);
+        waitForLoginButtonNotDisplay();
         return new HomePage();
+    }
+    public void waitForLoginButtonNotDisplay() {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

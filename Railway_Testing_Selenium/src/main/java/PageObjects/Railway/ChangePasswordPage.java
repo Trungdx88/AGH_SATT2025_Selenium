@@ -26,12 +26,24 @@ public class ChangePasswordPage extends GeneralPage{
         return Constant.WEBDRIVER.findElement(_btnChangePassword);
     }
 
-    public HomePage ChangePassword(String currentPassword , String newPassword, String confirmPassword ){
+    public void fillChangePasswordInformation(String currentPassword, String newPassword, String confirmPassword) {
+        this.getTxtCurrentPassword().clear();
         this.getTxtCurrentPassword().sendKeys(currentPassword);
+        this.getTxtNewPassword().clear();
         this.getTxtNewPassword().sendKeys(newPassword);
+        this.getTxtConfirmPassword().clear();
         this.getTxtConfirmPassword().sendKeys(confirmPassword);
+    }
+
+    public void submitChangePassword() {
         ((JavascriptExecutor) Constant.WEBDRIVER).executeScript("window.scrollTo(0, document.body.scrollHeight);");
         this.getBntChangePassword().click();
+    }
+
+    public HomePage ChangePassword(String currentPassword, String newPassword, String confirmPassword) {
+        fillChangePasswordInformation(currentPassword, newPassword, confirmPassword);
+        submitChangePassword();
         return new HomePage();
     }
+
 }

@@ -92,7 +92,6 @@ public class BookTicketTest extends BaseTest{
                 TestData.SEAT_TYPE.getValue(),
                 TestData.TICKET_AMOUNT.getValue()
         );
-
         bookTicketPage.bookTicket(
                 ticket.getDepartDate(),
                 ticket.getDepartStation(),
@@ -107,5 +106,4 @@ public class BookTicketTest extends BaseTest{
         boolean isTicketCancelled = myTicketPage.isTicketDisappeared();
         Assert.assertTrue(isTicketCancelled);
     }
-
 }

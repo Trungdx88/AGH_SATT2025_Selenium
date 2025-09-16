@@ -28,12 +28,24 @@ public class ResetPasswordPage extends GeneralPage{
         return Constant.WEBDRIVER.findElement(_btnResetPassword);
     }
 
-    public HomePage resetPassword(String newPassword , String confirmPassword , String resetToken ){
-        this.getTxtNewPassword().sendKeys(newPassword);
-        this.getTxtConfirmPassword().sendKeys(confirmPassword);
-        this.getTxtResetToken().sendKeys(resetToken);
+    public void fillResetPasswordInformation(String newPassword, String confirmPassword, String resetToken) {
+    this.getTxtNewPassword().clear();
+    this.getTxtNewPassword().sendKeys(newPassword);
+    this.getTxtConfirmPassword().clear();
+    this.getTxtConfirmPassword().sendKeys(confirmPassword);
+    this.getTxtResetToken().clear();
+    this.getTxtResetToken().sendKeys(resetToken);
+}
+
+    public void submitResetPassword() {
         ((JavascriptExecutor) Constant.WEBDRIVER).executeScript("window.scrollTo(0, document.body.scrollHeight);");
         this.getBntResetPassword().click();
+    }
+
+    public HomePage resetPassword(String newPassword, String confirmPassword, String resetToken) {
+        fillResetPasswordInformation(newPassword, confirmPassword, resetToken);
+        submitResetPassword();
         return new HomePage();
     }
+
 }

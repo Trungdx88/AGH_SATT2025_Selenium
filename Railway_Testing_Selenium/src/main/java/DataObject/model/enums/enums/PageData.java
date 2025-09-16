@@ -1,6 +1,5 @@
 package DataObject.model.enums.enums;
 
-import Common.Constant.Constant;
 
 public enum PageData {
     ARRIVE_STATION_ROUTE1(TestData.DEPART_STATION_ROUTE1.getValue()),
