@@ -1,6 +1,10 @@
 package Tsetcases.Railway;
 
 import Common.Constant.Constant;
+import Common.Constant.MessageHelper;
+import DataObject.model.enums.enums.MessageType;
+import DataObject.model.enums.enums.TestData;
+import DataObject.model.enums.model.User;
 import PageObjects.Railway.ForgotPasswordPage;
 import PageObjects.Railway.HomePage;
 import PageObjects.Railway.LoginPage;
@@ -19,19 +23,22 @@ public class ForgotPasswordTest extends BaseTest{
         LoginPage loginPage = homePage.gotoLoginPage();
         ForgotPasswordPage forgotPasswordPage = loginPage.gotoForgotPasswordPage();
 
-        String registeredEmail = Constant.USERNAME;
+        String registeredEmail = TestData.REGISTERED_EMAIL.getValue();
         forgotPasswordPage.forgotPassword(registeredEmail);
 
-        ResetPasswordPage resetPasswordPage = forgotPasswordPage.openResetPasswordLinkFromEmail(registeredEmail);
-        resetPasswordPage.resetPassword(Constant.NEW_PASSWORD, Constant.MISMATCH_CONFIRM_PASSWORD, "");
+        User resetUser = User.getResetPasswordMismatchToken();
+        ResetPasswordPage resetPasswordPage = forgotPasswordPage.openResetPasswordLinkFromEmail(resetUser.getUsername());
+        resetPasswordPage.resetPassword(resetUser.getPassword(), resetUser.getConfirmPassword(), resetUser.getPid());
 
         String actualTopMsg = resetPasswordPage.getForgotPasswordErrorMessage();
-        String expectedTopMsg = "The password reset token is incorrect or may be expired. Visit the forgot password page to generate a new one.";
-        Assert.assertEquals(actualTopMsg, expectedTopMsg, "Top error message is not as expected");
+        MessageType actualTopEnum = MessageHelper.fromMessage(actualTopMsg);
+        MessageType expectedTopEnum = MessageType.RESET_PASSWORD_TOP_ERROR;
+        Assert.assertEquals(actualTopEnum, expectedTopEnum);
 
         String actualTokenMsg = resetPasswordPage.getValidResetTokenMessage();
-        String expectedTokenMsg = "The password reset token is invalid.";
-        Assert.assertEquals(actualTokenMsg, expectedTokenMsg, "Token error message is not as expected");
+        MessageType actualTokenEnum = MessageHelper.fromMessage(actualTokenMsg);
+        MessageType expectedTokenEnum = MessageType.RESET_PASSWORD_TOKEN_ERROR;
+        Assert.assertEquals(actualTokenEnum, expectedTokenEnum);
     }
 
     @Test
@@ -43,19 +50,21 @@ public class ForgotPasswordTest extends BaseTest{
         LoginPage loginPage = homePage.gotoLoginPage();
         ForgotPasswordPage forgotPasswordPage = loginPage.gotoForgotPasswordPage();
 
-        String registeredEmail = Constant.USERNAME;
+        String registeredEmail = TestData.REGISTERED_EMAIL.getValue();
         forgotPasswordPage.forgotPassword(registeredEmail);
 
-        ResetPasswordPage resetPasswordPage = forgotPasswordPage.openResetPasswordLinkFromEmail(registeredEmail);
-        resetPasswordPage.resetPassword(Constant.NEW_PASSWORD, Constant.MISMATCH_CONFIRM_PASSWORD, Constant.RESET_TOKEN);
-
+        User resetUser = User.getResetPasswordMismatchConfirm();
+        ResetPasswordPage resetPasswordPage = forgotPasswordPage.openResetPasswordLinkFromEmail(resetUser.getUsername());
+        resetPasswordPage.resetPassword(resetUser.getPassword(), resetUser.getConfirmPassword(), resetUser.getPid());
 
         String actualGeneralMsg = resetPasswordPage.getForgotPasswordErrorMessage();
-        String expectedGeneralMsg = "Could not reset password. Please correct the errors and try again.";
-        Assert.assertEquals(actualGeneralMsg, expectedGeneralMsg, "General error message is not displayed as expected");
+        MessageType actualGeneralEnum = MessageHelper.fromMessage(actualGeneralMsg);
+        MessageType expectedGeneralEnum = MessageType.RESET_PASSWORD_GENERAL_ERROR;
+        Assert.assertEquals(actualGeneralEnum, expectedGeneralEnum);
 
         String actualConfirmPwdMsg = resetPasswordPage.getPasswordConfirmMessage();
-        String expectedConfirmPwdMsg = "The password confirmation did not match the new password.";
-        Assert.assertEquals(actualConfirmPwdMsg, expectedConfirmPwdMsg, "Confirm password error message is not displayed as expected");
+        MessageType actualConfirmEnum = MessageHelper.fromMessage(actualConfirmPwdMsg);
+        MessageType expectedConfirmEnum = MessageType.RESET_PASSWORD_CONFIRM_ERROR;
+        Assert.assertEquals(actualConfirmEnum, expectedConfirmEnum);
     }
 }

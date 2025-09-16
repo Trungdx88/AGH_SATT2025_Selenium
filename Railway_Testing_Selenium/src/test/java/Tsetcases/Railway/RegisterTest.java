@@ -1,6 +1,9 @@
 package Tsetcases.Railway;
 
 import Common.Constant.Constant;
+import Common.Constant.MessageHelper;
+import DataObject.model.enums.enums.MessageType;
+import DataObject.model.enums.model.User;
 import PageObjects.Railway.HomePage;
 import PageObjects.Railway.RegisterPage;
 import org.testng.Assert;
@@ -13,12 +16,18 @@ public class RegisterTest extends BaseTest{
         HomePage homePage = new HomePage();
         homePage.open();
 
-        RegisterPage registerPage = homePage.gotoRegisterPage();
-        registerPage.register(Constant.VALID_EMAIL,Constant.VALID_PASSWORD,Constant.VALID_CONFIRM_PASSWORD,Constant.VALID_PID);
+        homePage.gotoRegisterPage();
+        User user = User.getValidRegisterUser();
+        RegisterPage registerPage = new RegisterPage();
+        registerPage.register(user.getUsername(),
+                user.getPassword(),
+                user.getConfirmPassword(),
+                user.getPid());
 
         String actualMsg = registerPage.getSuccessMessage();
-        String expectedMsg = "Thank you for registering your account";
-        Assert.assertEquals(actualMsg, expectedMsg, "Register success message is not displayed as expected");
+        MessageType actualEnum = MessageHelper.fromMessage(actualMsg);
+        MessageType expectedEnum = MessageType.REGISTER_SUCCESS;
+        Assert.assertEquals(actualEnum, expectedEnum);;
     }
 
     @Test
@@ -28,11 +37,16 @@ public class RegisterTest extends BaseTest{
         homePage.open();
 
         RegisterPage registerPage = homePage.gotoRegisterPage();
-        registerPage.register(Constant.USERNAME,Constant.PASSWORD,Constant.MISMATCH_CONFIRM_PASSWORD,Constant.VALID_PID);
+        User user = User.getRegisterUserMismatchConfirm();
+        registerPage.register(user.getUsername(),
+                user.getPassword(),
+                user.getConfirmPassword(),
+                user.getPid());
 
         String actualMsg = registerPage.getRegisterErrorMessage();
-        String expectedMsg = "There're errors in the form. Please correct the errors and try again.";
-        Assert.assertEquals(actualMsg, expectedMsg, "Error message is not displayed as expected");
+        MessageType actualEnum = MessageHelper.fromMessage(actualMsg);
+        MessageType expectedEnum = MessageType.REGISTER_ERROR;
+        Assert.assertEquals(actualEnum, expectedEnum);
     }
 
 
@@ -43,18 +57,25 @@ public class RegisterTest extends BaseTest{
         homePage.open();
 
         RegisterPage registerPage = homePage.gotoRegisterPage();
-        registerPage.register(Constant.USERNAME, "", "", "");
+        User user = User.getRegisterUserEmpty();
+        registerPage.register(user.getUsername(),
+                user.getPassword(),
+                user.getConfirmPassword(),
+                user.getPid());
 
         String actualGeneralMsg = registerPage.getRegisterErrorMessage();
-        String expectedGeneralMsg = "There're errors in the form. Please correct the errors and try again.";
-        Assert.assertEquals(actualGeneralMsg, expectedGeneralMsg, "General error message is not displayed as expected");
+        MessageType actualGeneralEnum = MessageHelper.fromMessage(actualGeneralMsg);
+        MessageType expectedGeneralEnum = MessageType.REGISTER_ERROR;
+        Assert.assertEquals(actualGeneralEnum, expectedGeneralEnum);
 
         String actualPasswordMsg = registerPage.getValidPasswordMessage();
-        String expectedPasswordMsg = "Invalid password length.";
-        Assert.assertEquals(actualPasswordMsg, expectedPasswordMsg, "Password error message is not displayed as expected");
+        MessageType actualPasswordEnum = MessageHelper.fromMessage(actualPasswordMsg);
+        MessageType expectedPasswordEnum = MessageType.INVALID_PASSWORD;
+        Assert.assertEquals(actualPasswordEnum, expectedPasswordEnum);
 
         String actualPidMsg = registerPage.getValidPidMessage();
-        String expectedPidMsg = "Invalid ID length.";
-        Assert.assertEquals(actualPidMsg, expectedPidMsg, "PID error message is not displayed as expected");
+        MessageType actualPidEnum = MessageHelper.fromMessage(actualPidMsg);
+        MessageType expectedPidEnum = MessageType.INVALID_PID;
+        Assert.assertEquals(actualPidEnum, expectedPidEnum);
     }
 }

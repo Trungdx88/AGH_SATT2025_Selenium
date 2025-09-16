@@ -1,6 +1,7 @@
 package PageObjects.Railway;
 
 import Common.Constant.Constant;
+import DataObject.model.enums.model.User;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
@@ -18,9 +19,9 @@ public class LoginPage extends GeneralPage{
     }
     public WebElement getBtnLogin() {return Constant.WEBDRIVER.findElement(_btnLogin);}
 
-    public HomePage login(String username , String password){
-        this.getTxtUsername().sendKeys(username);
-        this.getTxtPassword().sendKeys(password);
+    public HomePage login(User user){
+        this.getTxtUsername().sendKeys(user.getUsername());
+        this.getTxtPassword().sendKeys(user.getPassword());
         ((JavascriptExecutor) Constant.WEBDRIVER).executeScript("window.scrollTo(0, document.body.scrollHeight);");
         this.getBtnLogin().click();
         return new HomePage();
