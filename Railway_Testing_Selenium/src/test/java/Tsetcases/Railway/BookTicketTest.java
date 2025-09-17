@@ -1,6 +1,12 @@
 package Tsetcases.Railway;
 
 import Common.Constant.Constant;
+import Common.Constant.MessageHelper;
+import DataObject.model.enums.enums.MessageType;
+import DataObject.model.enums.enums.PageData;
+import DataObject.model.enums.enums.TestData;
+import DataObject.model.enums.model.BookTicket;
+import DataObject.model.enums.model.User;
 import PageObjects.Railway.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.Select;
@@ -14,19 +20,26 @@ public class BookTicketTest extends BaseTest{
         HomePage homePage = new HomePage();
         homePage.open();
 
-        LoginPage loginPage = homePage.gotoLoginPage();
-        loginPage.login(Constant.USERNAME,Constant.PASSWORD);
-
+        User user = User.getValidUser();
+        LoginPage loginPage = new LoginPage();
+        loginPage.gotoLoginPage();
+        loginPage.login(user);
         BookTicketPage bookTicketPage = homePage.gotoBookTicketPage();
 
         Select dateDropdown = new Select(Constant.WEBDRIVER.findElement(By.name("Date")));
         String departDate = dateDropdown.getOptions().get(0).getText();
 
-        bookTicketPage.bookTicket(departDate,Constant.DEPART_STATION_ROUTE1, Constant.ARRIVE_STATION,Constant.SEAT_TYPE,Constant.TICKET_AMOUNT);
-
+        bookTicketPage.bookTicket(
+                departDate,
+                TestData.DEPART_STATION_ROUTE1.getValue(),
+                TestData.ARRIVE_STATION.getValue(),
+                TestData.SEAT_TYPE.getValue(),
+                TestData.TICKET_AMOUNT.getValue()
+        );
         String actualMessage = bookTicketPage.getBookTicketSuccessMessage();
-        String expectedMessage = "Ticket booked successfully!";
-        Assert.assertEquals(actualMessage, expectedMessage, "Booking success message is incorrect!");
+        MessageType actualEnum = MessageHelper.fromMessage(actualMessage);
+        MessageType expectedEnum = MessageType.BOOK_TICKET_SUCCESS;
+        Assert.assertEquals(actualEnum, expectedEnum);
     }
 
 
@@ -36,20 +49,24 @@ public class BookTicketTest extends BaseTest{
         HomePage homePage = new HomePage();
         homePage.open();
 
-        LoginPage loginPage = homePage.gotoLoginPage();
-        loginPage.login(Constant.USERNAME,Constant.PASSWORD);
+        User user = User.getValidUser();
+        LoginPage loginPage = new LoginPage();
+        loginPage.gotoLoginPage();
+        loginPage.login(user);
 
         TimetablePage timetablePage = homePage.gotoTimetablePage();
 
-        BookTicketPage bookTicketPage = timetablePage.clickBookTicket(Constant.DEPART_STATION_ROUTE2, Constant.DEPART_STATION_ROUTE1);
+        BookTicketPage bookTicketPage = timetablePage.clickBookTicket(
+                TestData.DEPART_STATION_ROUTE2.getValue(),
+                TestData.DEPART_STATION_ROUTE1.getValue()
+        );
+        PageData actualDepartEnum = PageData.fromMessage(bookTicketPage.getDepartStation());
+        PageData expectedDepartEnum = PageData.DEPART_STATION_ROUTE2;
+        Assert.assertEquals(actualDepartEnum, expectedDepartEnum);
 
-        String actualArriveStation = bookTicketPage.getArriveStation();
-        String expectedArriveStation = Constant.DEPART_STATION_ROUTE1;
-        Assert.assertEquals(actualArriveStation, expectedArriveStation, "Arrive Station is incorrect");
-
-        String actualDepartStation = bookTicketPage.getDepartStation();
-        String expectedDepartStation = Constant.DEPART_STATION_ROUTE2;
-        Assert.assertEquals(actualDepartStation, expectedDepartStation, "Depart Station is incorrect");
+        PageData actualArriveEnum = PageData.fromMessage(bookTicketPage.getArriveStation());
+        PageData expectedArriveEnum = PageData.ARRIVE_STATION_ROUTE1;
+        Assert.assertEquals(actualArriveEnum, expectedArriveEnum);
     }
 
     @Test
@@ -58,21 +75,35 @@ public class BookTicketTest extends BaseTest{
         HomePage homePage = new HomePage();
         homePage.open();
 
-        LoginPage loginPage = homePage.gotoLoginPage();
-        loginPage.login(Constant.USERNAME, Constant.PASSWORD);
+        User user = User.getValidUser();
+        LoginPage loginPage = new LoginPage();
+        loginPage.gotoLoginPage();
+        loginPage.login(user);
 
         BookTicketPage bookTicketPage = homePage.gotoBookTicketPage();
 
         Select dateDropdown = new Select(Constant.WEBDRIVER.findElement(By.name("Date")));
         String departDate = dateDropdown.getOptions().get(0).getText();
-        bookTicketPage.bookTicket(departDate,Constant.DEPART_STATION_ROUTE1, Constant.ARRIVE_STATION,Constant.SEAT_TYPE,Constant.TICKET_AMOUNT);
 
+        BookTicket ticket = new BookTicket(
+                departDate,
+                TestData.DEPART_STATION_ROUTE1.getValue(),
+                TestData.ARRIVE_STATION.getValue(),
+                TestData.SEAT_TYPE.getValue(),
+                TestData.TICKET_AMOUNT.getValue()
+        );
+        bookTicketPage.bookTicket(
+                ticket.getDepartDate(),
+                ticket.getDepartStation(),
+                ticket.getArriveStation(),
+                ticket.getSeatType(),
+                ticket.getTicketAmount()
+        );
         MyTicketPage myTicketPage = homePage.gotoMyTicketPage();
         myTicketPage.cancelFirstTicket();
         myTicketPage.confirmCancelTicket();
 
         boolean isTicketCancelled = myTicketPage.isTicketDisappeared();
-        Assert.assertTrue(isTicketCancelled, "The canceled ticket is still displayed!");
+        Assert.assertTrue(isTicketCancelled);
     }
-
 }

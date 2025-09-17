@@ -1,6 +1,9 @@
 package Tsetcases.Railway;
 
 import Common.Constant.Constant;
+import Common.Constant.MessageHelper;
+import DataObject.model.enums.enums.MessageType;
+import DataObject.model.enums.model.User;
 import PageObjects.Railway.BookTicketPage;
 import PageObjects.Railway.ChangePasswordPage;
 import PageObjects.Railway.HomePage;
@@ -16,13 +19,15 @@ public class LoginTest extends BaseTest{
         HomePage homePage = new HomePage();
         homePage.open();
 
-        LoginPage loginPage = homePage.gotoLoginPage();
+        User user = User.getValidUser();
+        LoginPage loginPage = new LoginPage();
+        loginPage.gotoLoginPage();
+        loginPage.login(user);
 
-        loginPage.login(Constant.USERNAME, Constant.PASSWORD);
-        String actualMsg = homePage.getWelcomeMessage();
-
-        String expectedMsg = "Welcome " + Constant.USERNAME;
-        Assert.assertEquals(actualMsg, expectedMsg, "Welcome message is not displayed as expected");
+        String actualMsg = loginPage.getWelcomeMessage();
+        MessageType actualEnum = MessageHelper.fromMessage(actualMsg);
+        MessageType expectedEnum = MessageType.WELCOME;
+        Assert.assertEquals(actualEnum, expectedEnum);
     }
 
     @Test
@@ -31,12 +36,16 @@ public class LoginTest extends BaseTest{
         HomePage homePage = new HomePage();
         homePage.open();
 
-        LoginPage loginPage = homePage.gotoLoginPage();
-        loginPage.login("", Constant.PASSWORD);
+        LoginPage loginPage = new LoginPage();
+        loginPage.gotoLoginPage();
+
+        User user = User.getInvalidUserBlank();
+        loginPage.login(user);
 
         String actualMsg = loginPage.getErrorMessage();
-        String expectedMsg = "There was a problem with your login and/or errors exist in your form.";
-        Assert.assertEquals(actualMsg, expectedMsg, "Error message is not displayed as expected");
+        MessageType actualEnum = MessageHelper.fromMessage(actualMsg);
+        MessageType expectedEnum = MessageType.INVALID_LOGIN;
+        Assert.assertEquals(actualEnum, expectedEnum);
     }
 
     @Test
@@ -45,12 +54,16 @@ public class LoginTest extends BaseTest{
         HomePage homePage = new HomePage();
         homePage.open();
 
-        LoginPage loginPage = homePage.gotoLoginPage();
-        loginPage.login(Constant.USERNAME, Constant.PASSWORD_INVALID);
+        LoginPage loginPage = new LoginPage();
+        loginPage.gotoLoginPage();
 
-        String actualError = loginPage.getErrorMessage();
-        String expectedError = "There was a problem with your login and/or errors exist in your form.";
-        Assert.assertEquals(actualError, expectedError, "Error message is not displayed as expected");
+        User user = User.getInvalidUser();
+        loginPage.login(user);
+
+        String actualMsg = loginPage.getErrorMessage();
+        MessageType actualEnum = MessageHelper.fromMessage(actualMsg);
+        MessageType expectedEnum = MessageType.INVALID_LOGIN;
+        Assert.assertEquals(actualEnum, expectedEnum);
     }
 
     @Test
@@ -59,14 +72,17 @@ public class LoginTest extends BaseTest{
         HomePage homePage = new HomePage();
         homePage.open();
 
-        LoginPage loginPage = homePage.gotoLoginPage();
+        LoginPage loginPage = new LoginPage();
+        loginPage.gotoLoginPage();
 
-        HomePage homePageAfterLogin = loginPage.login(Constant.USERNAME,Constant.PASSWORD);
-        BookTicketPage bookTicketPage = homePageAfterLogin.gotoBookTicketPage();
+        User user = User.getValidUser();
+        loginPage.login(user);
+        homePage.gotoBookTicketPage();
+        BookTicketPage bookTicketPage = new BookTicketPage();
 
-        String actualTitle = bookTicketPage.getPageTitle();
-        String expectedTitle = "Book ticket";
-        Assert.assertEquals(actualTitle, expectedTitle, "Book Ticket page is not displayed as expected");
+        MessageType actualEnum = MessageHelper.fromMessage(bookTicketPage.getPageTitle());
+        MessageType expectedEnum = MessageType.BOOKTICKET_TITLE;
+        Assert.assertEquals(actualEnum, expectedEnum);
     }
 
     @Test
@@ -75,14 +91,16 @@ public class LoginTest extends BaseTest{
         HomePage homePage = new HomePage();
         homePage.open();
 
-        LoginPage loginPage = homePage.gotoLoginPage();
+        LoginPage loginPage = new LoginPage();
+        loginPage.gotoLoginPage();
         for (int i = 0; i < 5; i++) {
-            loginPage.login(Constant.USERNAME, Constant.PASSWORD_INVALID);
+            User user = User.getInvalidUser();
+            loginPage.login(user);
         }
-
         String actualMsg = loginPage.getErrorMessage();
-        String expectedMsg = "You have used 4 out of 5 login attempts. After all 5 have been used, you will be unable to login for 15 minutes.";
-        Assert.assertEquals(actualMsg, expectedMsg, "Login attempts warning message is not displayed as expected");
+        MessageType actualEnum = MessageHelper.fromMessage(actualMsg);
+        MessageType expectedEnum = MessageType.ATTEMPT_WARNING;
+        Assert.assertEquals(actualEnum, expectedEnum);
     }
 
     @Test
@@ -91,20 +109,27 @@ public class LoginTest extends BaseTest{
         HomePage homePage = new HomePage();
         homePage.open();
 
-        LoginPage loginPage = homePage.gotoLoginPage();
-        loginPage.login(Constant.USERNAME, Constant.PASSWORD);
+        LoginPage loginPage = new LoginPage();
+        loginPage.gotoLoginPage();
 
-        BookTicketPage bookTicketPage = homePage.gotoBookTicketPage();
+        User user = User.getValidUser();
+        loginPage.login(user);
+
+        homePage.gotoBookTicketPage();
+        BookTicketPage bookTicketPage = new BookTicketPage();
+
         String actualBookTicketTitle = bookTicketPage.getPageTitle();
-        String expectedBookTicketTitle = "Book ticket";
-        Assert.assertEquals(actualBookTicketTitle, expectedBookTicketTitle,
-                "Book Ticket page should be displayed after clicking tab");
+
+        MessageType actualEnumBookTicket = MessageHelper.fromMessage(actualBookTicketTitle);
+        MessageType expectedEnumBookTicket = MessageType.BOOKTICKET_TITLE;
+        Assert.assertEquals(actualEnumBookTicket, expectedEnumBookTicket);
 
         ChangePasswordPage changePasswordPage = homePage.gotoChangePasswordPage();
         String actualChangePasswordTitle = changePasswordPage.getPageTitle();
-        String expectedChangePasswordTitle = "Change password";
-        Assert.assertEquals(actualChangePasswordTitle, expectedChangePasswordTitle,
-                "Change Password page should be displayed after clicking tab");
+
+        MessageType actualEnumChangePassword = MessageHelper.fromMessage(actualChangePasswordTitle);
+        MessageType expectedEnumChangePassword = MessageType.CHANGEPASSWORD_TITLE;
+        Assert.assertEquals(actualEnumChangePassword, expectedEnumChangePassword);
     }
     @Test
     public void TC08() {
@@ -113,11 +138,15 @@ public class LoginTest extends BaseTest{
         HomePage homePage = new HomePage();
         homePage.open();
 
-        LoginPage loginPage = homePage.gotoLoginPage();
-        loginPage.login(Constant.UNACTIVATED_EMAIL,Constant.UNACTIVATED_PASSWORD);
+        LoginPage loginPage = new LoginPage();
+        loginPage.gotoLoginPage();
+
+        User user = User.getUserActivated();
+        loginPage.login(user);
 
         String actualMsg = loginPage.getErrorMessage();
-        String expectedMsg = "Invalid username or password. Please try again.";
-        Assert.assertEquals(actualMsg, expectedMsg, "Error message is not displayed as expected");
+        MessageType actualEnum = MessageHelper.fromMessage(actualMsg);
+        MessageType expectedEnum = MessageType.PASSWORD_MISMATCH;
+        Assert.assertEquals(actualEnum, expectedEnum);
     }
 }
