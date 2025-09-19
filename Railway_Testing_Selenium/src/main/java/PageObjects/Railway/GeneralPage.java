@@ -126,4 +126,8 @@ public class GeneralPage {
         Constant.WEBDRIVER.findElement(By.linkText("My ticket")).click();
         return new MyTicketPage();
     }
+    public TicketPricePage gotoTicketPricePage() {
+        Constant.WEBDRIVER.findElement(By.linkText("Ticket price")).click();
+        return new TicketPricePage();
+    }
 }
