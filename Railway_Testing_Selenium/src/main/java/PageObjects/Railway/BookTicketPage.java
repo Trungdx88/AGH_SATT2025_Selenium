@@ -1,10 +1,13 @@
 package PageObjects.Railway;
 
 import Common.Constant.Constant;
+import DataObject.model.enums.model.BookTicket;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
+
+import java.util.List;
 
 public class BookTicketPage extends GeneralPage {
     private final By _cbbDepartStation = By.xpath("//select[@name='DepartStation']");
@@ -89,5 +92,4 @@ public class BookTicketPage extends GeneralPage {
         fillBookTicketInformation(departDate, departStation, arriveStation, seatType, ticketAmount);
         submitBookTicket();
     }
-
 }
